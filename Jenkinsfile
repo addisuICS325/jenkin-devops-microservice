@@ -5,7 +5,11 @@
 
 pipeline {
 	// agent any
-	agent { docker { image 'maven:3.6.3'} }
+	agent { 
+		docker { 
+			image 'maven:3.6.3' 
+			} 
+		}
 	stages {
 		stage('Build') {
 			steps {
@@ -26,14 +30,21 @@ pipeline {
 	}
 	post {
 		always {
-			echo "I run always"
+			echo "Test run completed"
 		}
 		success {
-			echo "I run when you are successful"
+			echo "Successfully!"
 		}
 		failure {
-			echo "I run when you are fail"
+			echo "Failed!"
 		}
+		 changed {
+            echo 'This will run only if the state of the Pipeline has changed'
+            echo 'For example, if the Pipeline was previously failing but is now successful'
+        }
+		options {
+        timeout(time: 60, unit: 'MINUTES')
+    	}
 	}
 }
 	
