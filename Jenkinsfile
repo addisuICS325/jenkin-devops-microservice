@@ -5,7 +5,6 @@
 
 node('jenkins-slave') { 
 
-	stages {
 		stage('Checkout') {
 			steps {
 				sh "mvn --version"
@@ -58,7 +57,6 @@ node('jenkins-slave') {
 				}
 			}
 		}
-	}
 	post {
 		always {
 			echo "Test run completed"
@@ -75,4 +73,3 @@ node('jenkins-slave') {
         }
 	}
 }
-	
