@@ -3,10 +3,7 @@
 //say pipeline and over here in the pipeline you can configure a agent.]
 
 
-pipeline {
-	agent any
-	// agent { docker { image 'maven:3.6.3' } }
-	}
+node('jenkins-slave') { 
 
 	stages {
 		stage('Checkout') {
