@@ -1,11 +1,13 @@
-
 //Declarative [ declarative pipeline is we would not need to have a node anymore. So, we can directly
 //say pipeline and over here in the pipeline you can configure a agent.]
 
 
-node('jenkins-slave') { 
+pipeline {
+	agent any
+	// agent { docker { image 'maven:3.6.3' } }
 
-		stage('Checkout') {
+	stages {
+		stage('Build') {
 			steps {
 				sh "mvn --version"
 				sh " docker --version"
@@ -18,45 +20,17 @@ node('jenkins-slave') {
 				echo "BUILD_URL - $env.BUILD_URL"
 			}
 		}
-		stage('Compile') {
-			steps {
-				sh "mvn clean compile"
-			}
-		}
 		stage('Test') {
 			steps {
-				sh "mvn test"
+				echo "Test"
 			}
 		}
 		stage('Integration Test') {
 			steps {
-				sh "mvn failsafe:integration-test failsafe:verify"
+				echo "Integration Test"
 			}
 		}
-		stage('Package') {
-			steps {
-				sh "mvn package -DskipTests"
-			}
-		}
-		stage('Build Docker image'){
-			steps {
-				//"docker build -t passdocker/currency-exchange-devops:$env.BUILD_TAG"
-				script {
-					dockerImage=docker.build("passdocker/currency-exchange-devops:${env.BUILD_TAG}")
-				}
- 			}
-		}
-		stage('Push Docker image'){
-			steps {
-				script {
-					docker.withRegistry(' ', '93fef224-3018-4463-a893-0c5f3d57b041'){
-						dockerImage.push();
-					    dockerImage.push('latest');
-					}
-					
-				}
-			}
-		}
+	}
 	post {
 		always {
 			echo "Test run completed"
